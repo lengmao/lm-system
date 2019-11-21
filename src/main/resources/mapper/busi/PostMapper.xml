@@ -1,0 +1,78 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.blog.lm.busi.mapper.PostMapper">
+
+    <!-- 通用查询映射结果 -->
+    <resultMap id="BaseResultMap" type="com.blog.lm.busi.entity.Post">
+        <id column="id" property="id"/>
+        <result column="user_id" property="userId"/>
+        <result column="menu_id" property="menuId"/>
+        <result column="tag_id" property="tagId"/>
+        <result column="post_title" property="postTitle"/>
+        <result column="cover_image" property="coverImage"/>
+        <result column="post_abstract" property="postAbstract"/>
+        <result column="post_content" property="postContent"/>
+        <result column="post_content_md" property="postContentMd"/>
+        <result column="post_status" property="postStatus"/>
+        <result column="post_view" property="postView"/>
+        <result column="post_like" property="postLike"/>
+        <result column="post_source" property="postSource"/>
+        <result column="allow_comment" property="allowComment"/>
+        <result column="del_flag" property="delFlag"/>
+        <result column="create_time" property="createTime"/>
+    </resultMap>
+
+    <!--管理员查看文章-->
+    <select id="pageAll" resultType="com.blog.lm.busi.entity.Post">
+        SELECT p.*
+        FROM busi_post p
+        <where>
+            <if test="post.menuId != null">
+                p.menu_id = #{post.menuId}
+            </if>
+            <if test="post.tagId != null">
+                p.tag_id = #{post.tagId}
+            </if>
+            <if test="post.postStatus != null and post.postStatus.trim() != ''">
+                p.post_status = #{post.postStatus}
+            </if>
+            AND p.del_flag=0
+        </where>
+        ORDER BY p.create_time DESC
+    </select>
+
+    <!--首页展示文章-->
+    <select id="pageHome" resultType="com.blog.lm.busi.entity.Post">
+        SELECT p.*
+        FROM busi_post p
+        WHERE p.post_status = 0
+        ORDER BY p.create_time DESC, p.post_view DESC, P.post_like DESC
+    </select>
+
+    <!--用户首页展示自己的文章-->
+    <select id="pageUser" resultType="com.blog.lm.busi.entity.Post">
+        SELECT P.*
+        FROM busi_post
+        WHERE p.user_id = #{userId}
+          AND p.post_status = 0
+        ORDER BY p.create_time DESC
+    </select>
+
+    <!-- 通过文章分类查询文章 -->
+    <select id="getPageByMenuId" resultType="com.blog.lm.busi.entity.Post">
+        SELECT P.*
+        FROM busi_post
+        WHERE p.menu_id = #{menuId}
+          AND p.post_status = 0
+        ORDER BY p.create_time DESC
+    </select>
+
+    <!--通过标签查询文章-->
+    <select id="getPageByTagId" resultType="com.blog.lm.busi.entity.Post">
+        SELECT P.*
+        FROM busi_post
+        WHERE p.tag_id = #{tagId}
+          AND p.post_status = 0
+        ORDER BY p.create_time DESC
+    </select>
+</mapper>
