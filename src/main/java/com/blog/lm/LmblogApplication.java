@@ -1,5 +1,6 @@
 package com.blog.lm;
 
+import com.mysql.cj.x.protobuf.MysqlxDatatypes;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.annotation.EnableMBeanExport;
@@ -12,5 +13,5 @@ public class LmblogApplication {
     public static void main(String[] args) {
         SpringApplication.run(LmblogApplication.class, args);
     }
-
 }
+
